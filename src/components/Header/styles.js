@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 export const Container = styled.div`
   background: #fff;
   padding: 0 30px;
+  margin-bottom: 20px;
 `;
 
 export const Content = styled.div`
@@ -55,6 +56,8 @@ export const Profile = styled.div`
       font-size: 12px;
       color: red;
       align-self: center;
+      border: none;
+      background: inherit;
     }
   }
 `;
