@@ -31,16 +31,16 @@ export default function Header() {
             ENCOMENDAS
           </NavLink>
           <NavLink
-            to="/deliveries"
-            clicked={tab === 'courier'}
+            to="/couriers"
+            clicked={tab === 'couriers'}
             onClick={() => {
-              setTab('courier');
+              setTab('couriers');
             }}
           >
             ENTREGADORES
           </NavLink>
           <NavLink
-            to="/deliveries"
+            to="/recipients"
             clicked={tab === 'recipients'}
             onClick={() => {
               setTab('recipients');
@@ -49,7 +49,7 @@ export default function Header() {
             DESTINATÁRIOS
           </NavLink>
           <NavLink
-            to="/deliveries"
+            to="/problems"
             clicked={tab === 'problems'}
             onClick={() => {
               setTab('problems');

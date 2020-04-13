@@ -3,7 +3,7 @@ import React from 'react';
 import { MdSearch } from 'react-icons/md';
 import { Search, InputSearchBar } from './styles';
 
-export default function SearchBar() {
+export default function SearchBar({ text }) {
   return (
     <Search>
       <MdSearch
@@ -11,7 +11,7 @@ export default function SearchBar() {
         color="#623CEA"
         size="1.5em"
       />
-      <InputSearchBar type="text" placeholder="Buscar por encomendas" />
+      <InputSearchBar type="text" placeholder={text} />
     </Search>
   );
 }

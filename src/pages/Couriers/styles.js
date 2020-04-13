@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { lighten } from 'polished';
-
 export const Container = styled.div`
   padding: 0 50px 0 50px;
   display: flex;
@@ -56,9 +54,8 @@ export const TableContainer = styled.div`
 
 export const TableRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr repeat(5, 2fr) 0.5fr;
+  grid-template-columns: 1fr 2fr 3fr 3fr 0.5fr;
   margin-bottom: 20px;
-  align-items: center;
 
   &:first-child {
     font-weight: bold;
@@ -87,48 +84,9 @@ export const Actions = styled.ul`
   border-radius: 20px;
 `;
 
-const spanStatusColor = {
-  entregue: '#2ca42b',
-  cancelada: '#DE3B3B',
-  pendente: '#C1BC35',
-  retirada: '#4D85EE',
-};
-
-export const LabelStatus = styled.div`
-  display: flex;
-  flex-direction: row;
-  display: inline-block;
-  svg {
-    margin: 0 5px;
-  }
-  color: ${(props) => spanStatusColor[props.status]};
-
-  background: ${(props) => lighten(0.3, spanStatusColor[props.status])};
-  padding: 6px 10px 6px 6px;
-  border-radius: 12px;
-  font: 13px 'Roboto', sans-serif;
-  font-weight: bold;
-`;
-
-export const Fullscreen = styled.div`
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.7;
-`;
-
-export const CourierProfile = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  img {
-    margin-right: 5px;
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-  }
+export const ProfilePicture = styled.img`
+  margin-right: 5px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
 `;
