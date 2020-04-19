@@ -20,18 +20,38 @@ export default function RecipientInput(props) {
   const recipientFetch = props.location.recipient
     ? props.location.recipient
     : null;
-  const [recipient, setRecipient] = useState(recipientFetch);
+  const [recipient, setRecipient] = useState(recipientFetch || null);
+
+  const title = recipientFetch
+    ? 'Edição de destinatário'
+    : 'Cadastro de destinatário';
 
   async function handleSubmit(data) {
-    const response = await api.put(`recipients/${recipient.id}`, data);
-    setRecipient(response.data);
+    if (
+      data.name &&
+      data.street &&
+      data.number &&
+      data.complementary_data &&
+      data.city &&
+      data.city &&
+      data.state &&
+      data.postal_code
+    ) {
+      let response;
+      if (recipient) {
+        response = await api.put(`recipients/${recipient.id}`, data);
+      } else {
+        response = await api.post('recipients', data);
+      }
+      setRecipient(response.data);
+    }
   }
 
   return (
     <Container>
       <Form initialData={recipient} onSubmit={handleSubmit}>
         <PageHead>
-          <PageTitle>Cadastro de destinatário</PageTitle>
+          <PageTitle>{title}</PageTitle>
           <PageActions>
             <Button className="back" type="button">
               <div>

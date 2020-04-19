@@ -17,23 +17,46 @@ import {
 
 export default function CourierInput(props) {
   const courierFetch = props.location.courier ? props.location.courier : null;
-  const [courier, setCourier] = useState(courierFetch);
+  const [courier, setCourier] = useState(courierFetch || null);
+
+  const title = courierFetch
+    ? 'Edição de entregadores'
+    : 'Cadastro de entregadores';
 
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(courierFetch.avatar.url);
+  const [preview, setPreview] = useState(
+    courierFetch ? courierFetch.avatar.url : null
+  );
 
   async function handleSubmit(courierToUpd) {
     const data = new FormData();
-    let hasChanged = false;
-    if (file) {
-      data.append('file', file);
-      hasChanged = true;
-    }
 
-    if (
-      courierToUpd.email !== courier.email ||
-      courierToUpd.name !== courier.name
-    ) {
+    if (courier) {
+      let hasChanged = false;
+      if (file) {
+        data.append('file', file);
+        hasChanged = true;
+      }
+
+      if (
+        courierToUpd.email !== courier.email ||
+        courierToUpd.name !== courier.name
+      ) {
+        data.append(
+          'courier',
+          JSON.stringify({
+            email: courierToUpd.email,
+            name: courierToUpd.name,
+          })
+        );
+        hasChanged = true;
+      }
+      if (hasChanged) {
+        const response = await api.put(`couriers/${courier.id}`, data);
+        setCourier(response.data);
+      }
+    } else if (courierToUpd.email && courierToUpd.name && file) {
+      data.append('file', file);
       data.append(
         'courier',
         JSON.stringify({
@@ -41,10 +64,7 @@ export default function CourierInput(props) {
           name: courierToUpd.name,
         })
       );
-      hasChanged = true;
-    }
-    if (hasChanged) {
-      const response = await api.put(`couriers/${courier.id}`, data);
+      const response = await api.post('couriers', data);
       setCourier(response.data);
     }
   }
@@ -59,7 +79,7 @@ export default function CourierInput(props) {
     <Container>
       <Form initialData={courier} onSubmit={handleSubmit}>
         <PageHead>
-          <PageTitle>Cadastro de entregadores</PageTitle>
+          <PageTitle>{title}</PageTitle>
           <PageActions>
             <Button className="back" type="button">
               <div>

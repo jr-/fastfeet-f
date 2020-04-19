@@ -56,6 +56,7 @@ export const TableRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 3fr 3fr 0.5fr;
   margin-bottom: 20px;
+  align-items: center;
 
   &:first-child {
     font-weight: bold;

@@ -68,18 +68,53 @@ export default function Deliveries() {
     setActionsRowVisible('');
     setModalVisible(true);
   };
+
+  const deleteDelivery = async () => {
+    const response = await window.confirm(
+      'Você tem certeza que deseja excluir esta encomenda?'
+    );
+    if (response) {
+      const resp = await api.delete(`deliveries/${deliverySelect.id}`);
+    }
+  };
+
+  const filterByProductName = async (value) => {
+    const response = await api.get(`deliveries?name=${value}`);
+
+    const deliveriesLoaded = response.data.map((d) => ({
+      ...d,
+      startDateFormatted: d.start_date
+        ? format(parseISO(d.start_date), 'dd/MM/yyyy')
+        : null,
+      endDateFormatted: d.end_date
+        ? format(parseISO(d.end_date), 'dd/MM/yyyy')
+        : null,
+      canceledAtFormatted: d.canceled_at
+        ? format(parseISO(d.canceled_at), 'dd/MM/yyyy')
+        : null,
+      status: words[d.status].br,
+    }));
+
+    setDeliveries(deliveriesLoaded);
+  };
+
   return (
     <>
       <Container>
         <PageTitle>Gerenciando encomendas</PageTitle>
         <PageActions>
-          <SearchBar text="Buscar por encomendas" />
-          <Button type="button">
-            <div>
-              <MdAdd size={16} color="#FFF" />
-            </div>
-            <span>CADASTRAR</span>
-          </Button>
+          <SearchBar
+            text="Buscar por encomendas"
+            onChange={filterByProductName}
+          />
+          <Link to={{ pathname: '/delivery/add' }}>
+            <Button type="button">
+              <div>
+                <MdAdd size={16} color="#FFF" />
+              </div>
+              <span>CADASTRAR</span>
+            </Button>
+          </Link>
         </PageActions>
         <TableContainer>
           <TableRow>
@@ -125,7 +160,7 @@ export default function Deliveries() {
                     <Link to={{ pathname: '/delivery/edit', delivery: d }}>
                       Editar
                     </Link>
-                    <li>Excluir</li>
+                    <li onClick={() => deleteDelivery()}>Excluir</li>
                   </Actions>
                 ) : null}
               </TableColumn>

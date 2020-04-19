@@ -23,6 +23,9 @@ export default function Routes() {
       <Route path="/couriers/edit" exact component={CourierInput} />
       <Route path="/recipients/edit" exact component={RecipientInput} />
       <Route path="/delivery/edit" exact component={DeliveryInput} />
+      <Route path="/delivery/add" exact component={DeliveryInput} />
+      <Route path="/couriers/add" exact component={CourierInput} />
+      <Route path="/recipients/add" exact component={RecipientInput} />
     </Switch>
   );
 }

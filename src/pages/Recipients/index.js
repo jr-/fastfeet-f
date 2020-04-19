@@ -43,17 +43,41 @@ export default function Recipients() {
     }
     setActionsRowVisible(rowIdSet);
   };
+
+  const filterByRecipientName = async (value) => {
+    const response = await api.get(`recipients?name=${value}`);
+    const recipientsLoaded = response.data.map((r) => ({
+      ...r,
+      address: `${r.street}, ${r.number}, ${r.city} - ${r.state}`,
+    }));
+    setRecipients(recipientsLoaded);
+  };
+
+  const deleteRecipient = async () => {
+    const response = await window.confirm(
+      'Você tem certeza que deseja deletar este destinatário?'
+    );
+    if (response) {
+      const resp = await api.delete(`recipients/${actionsRowVisible}`);
+    }
+  };
+
   return (
     <Container>
       <PageTitle>Gerenciando destinatários</PageTitle>
       <PageActions>
-        <SearchBar text="Buscar por destinatários" />
-        <Button type="button">
-          <div>
-            <MdAdd size={16} color="#FFF" />
-          </div>
-          <span>CADASTRAR</span>
-        </Button>
+        <SearchBar
+          text="Buscar por destinatários"
+          onChange={filterByRecipientName}
+        />
+        <Link to={{ pathname: '/recipients/add' }}>
+          <Button type="button">
+            <div>
+              <MdAdd size={16} color="#FFF" />
+            </div>
+            <span>CADASTRAR</span>
+          </Button>
+        </Link>
       </PageActions>
       <TableContainer>
         <TableRow>
@@ -76,7 +100,7 @@ export default function Recipients() {
                   <Link to={{ pathname: '/recipients/edit', recipient: r }}>
                     Editar
                   </Link>
-                  <li>Excluir</li>
+                  <li onClick={() => deleteRecipient()}>Excluir</li>
                 </Actions>
               ) : null}
             </TableColumn>

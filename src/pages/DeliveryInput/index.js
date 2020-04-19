@@ -20,14 +20,21 @@ export default function DeliveryInput(props) {
   const deliveryFetch = props.location.delivery
     ? props.location.delivery
     : null;
+  const [title, setTitle] = useState(
+    deliveryFetch ? 'Edição de encomendas' : 'Adicionar encomenda'
+  );
   const [recipients, setRecipients] = useState([]);
-  const [recipient, setRecipient] = useState(deliveryFetch.recipient.name);
+  const [recipient, setRecipient] = useState(
+    deliveryFetch ? deliveryFetch.recipient.name : null
+  );
   const [couriers, setCouriers] = useState([]);
-  const [courier, setCourier] = useState(deliveryFetch.courier.name);
+  const [courier, setCourier] = useState(
+    deliveryFetch ? deliveryFetch.courier.name : null
+  );
 
   const [delivery, setDelivery] = useState({
-    id: deliveryFetch.id,
-    product: deliveryFetch.product,
+    id: deliveryFetch ? deliveryFetch.id : null,
+    product: deliveryFetch ? deliveryFetch.product : null,
   });
 
   useEffect(() => {
@@ -55,15 +62,28 @@ export default function DeliveryInput(props) {
   }, []);
 
   async function handleSubmit(data) {
-    const recipientF = recipients.find((r) => r.name === recipient);
-    const courierF = couriers.find((c) => c.name === courier);
-    const deliveryToUpd = {
-      product: data.product,
-      recipient_id: recipientF.id,
-      courier_id: courierF.id,
-    };
-    const response = await api.put(`deliveries/${delivery.id}`, deliveryToUpd);
-    setDelivery({ id: response.data.id, product: response.data.product });
+    let response;
+    if (delivery.id) {
+      const recipientF = recipients.find((r) => r.name === recipient);
+      const courierF = couriers.find((c) => c.name === courier);
+      const deliveryToUpd = {
+        product: data.product,
+        recipient_id: recipientF.id,
+        courier_id: courierF.id,
+      };
+      response = await api.put(`deliveries/${delivery.id}`, deliveryToUpd);
+      setDelivery({ id: response.data.id, product: response.data.product });
+    } else if (recipient && courier && data.product) {
+      const recipientF = recipients.find((r) => r.name === recipient);
+      const courierF = couriers.find((c) => c.name === courier);
+      const deliveryToAdd = {
+        product: data.product,
+        recipient_id: recipientF.id,
+        courier_id: courierF.id,
+      };
+      response = await api.post(`deliveries`, deliveryToAdd);
+      setDelivery({ id: response.data.id, product: response.data.product });
+    }
   }
 
   function handleRecipient({ value }) {
@@ -78,7 +98,7 @@ export default function DeliveryInput(props) {
     <Container>
       <Form initialData={delivery} onSubmit={handleSubmit}>
         <PageHead>
-          <PageTitle>Edição de encomendas</PageTitle>
+          <PageTitle>{title}</PageTitle>
           <PageActions>
             <Button className="back" type="button">
               <div>

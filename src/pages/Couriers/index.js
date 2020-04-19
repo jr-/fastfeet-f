@@ -39,17 +39,36 @@ export default function Couriers() {
     setActionsRowVisible(rowIdSet);
   };
 
+  const filterByCourierName = async (value) => {
+    const response = await api.get(`couriers?name=${value}`);
+    setCouriers(response.data);
+  };
+
+  const deleteCourier = async () => {
+    const response = await window.confirm(
+      'Você tem certeza que deseja deletar este entregador?'
+    );
+    if (response) {
+      const resp = await api.delete(`couriers/${actionsRowVisible}`);
+    }
+  };
+
   return (
     <Container>
       <PageTitle>Gerenciando entregadores</PageTitle>
       <PageActions>
-        <SearchBar text="Buscar por entregadores" />
-        <Button type="button">
-          <div>
-            <MdAdd size={16} color="#FFF" />
-          </div>
-          <span>CADASTRAR</span>
-        </Button>
+        <SearchBar
+          text="Buscar por entregadores"
+          onChange={filterByCourierName}
+        />
+        <Link to={{ pathname: '/couriers/add' }}>
+          <Button type="button">
+            <div>
+              <MdAdd size={16} color="#FFF" />
+            </div>
+            <span>CADASTRAR</span>
+          </Button>
+        </Link>
       </PageActions>
       <TableContainer>
         <TableRow>
@@ -82,7 +101,7 @@ export default function Couriers() {
                   <Link to={{ pathname: '/couriers/edit', courier: c }}>
                     Editar
                   </Link>
-                  <li>Excluir</li>
+                  <li onClick={() => deleteCourier()}>Excluir</li>
                 </Actions>
               ) : null}
             </TableColumn>

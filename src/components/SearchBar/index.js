@@ -3,7 +3,7 @@ import React from 'react';
 import { MdSearch } from 'react-icons/md';
 import { Search, InputSearchBar } from './styles';
 
-export default function SearchBar({ text }) {
+export default function SearchBar({ text, onChange }) {
   return (
     <Search>
       <MdSearch
@@ -11,7 +11,11 @@ export default function SearchBar({ text }) {
         color="#623CEA"
         size="1.5em"
       />
-      <InputSearchBar type="text" placeholder={text} />
+      <InputSearchBar
+        type="text"
+        placeholder={text}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </Search>
   );
 }

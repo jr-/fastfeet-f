@@ -42,6 +42,17 @@ export default function Problems() {
     setActionsRowVisible('');
     setModalVisible(true);
   };
+
+  const cancelDelivery = async () => {
+    const response = await window.confirm(
+      'Você tem certeza que deseja cancelar esta encomenda?'
+    );
+    if (response) {
+      const resp = await api.delete(
+        `problems/${problemSelect.id}/cancel-delivery`
+      );
+    }
+  };
   return (
     <>
       <Container>
@@ -54,7 +65,7 @@ export default function Problems() {
           </TableRow>
           {problems.map((p) => (
             <TableRow key={p.id}>
-              <TableColumn>#{p.id}</TableColumn>
+              <TableColumn>#{p.delivery_id}</TableColumn>
               <TableColumn>
                 <Truncate lines={1} ellipsis={<span>...</span>}>
                   {p.description}
@@ -67,7 +78,7 @@ export default function Problems() {
                 {actionsRowVisible === p.id ? (
                   <Actions>
                     <li onClick={() => showDetails()}>Visualizar</li>
-                    <li>Cancelar encomenda</li>
+                    <li onClick={() => cancelDelivery()}>Cancelar encomenda</li>
                   </Actions>
                 ) : null}
               </TableColumn>
